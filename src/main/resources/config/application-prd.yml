@@ -1,0 +1,145 @@
+server:
+  port: 9200
+
+temporary-file-context: /home/bestlc_dev/_tmp
+static-file-context:
+
+spring:
+  profiles: prod
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  mail:
+    host: please-set
+    port: 25
+    username: <your-mail-username>
+    password: <your-mail-password>
+    nickname: <your-mail-nickname>
+    properties:
+      mail.transport.protocol: smtp
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory
+      mail.smtp.socketFactory.fallback: false
+      mail.debug: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+  redis:
+    host: bestlc-fin.woqkzf.0001.apn2.cache.amazonaws.com
+    port: 6379
+    lettuce:
+      pool:
+        max-active: 10
+        max-wait: 10
+        max-idle: 2
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: 3d81efbd86f20cba7b6146348159d3c6
+            client-secret: u0tXPMggJRs4j6GCOglOBtzo1Ua9v53i
+            authorization-grant-type: authorization_code
+            redirect-uri-template: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope: profile, account_email
+            client-name: KAKAO
+            client-authentication-method: POST
+        provider:
+          kakao:
+            token-uri: https://kauth.kakao.com/oauth/token
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
+app:
+  oauth2:
+    # After successfully authenticating with the OAuth2 Provider,
+    # we'll be generating an auth token for the user and sending the token to the
+    # redirectUri mentioned by the client in the /oauth2/authorize request.
+    # We're not using cookies because they won't work well in mobile clients.
+    authorizedRedirectUris:
+      - https://www.bestfin.co.kr/auth/oauth2/result
+      - myandroidapp://oauth2/redirect
+      - myiosapp://oauth2/redirect
+
+# kcb relay server
+# kcb test : 219.254.35.125:24200 --> 219.255.136.242:22400
+# kcb prod : 219.254.35.125:24100 --> 219.255.136.241:22400
+kcb:
+  user-no: X00320
+  partner-code: 1000001285
+  ssl:
+    host: 219.254.35.125
+    port: 24100
+    key-store: /home/bestlc_dev/projects/best-fin-api/src/main/resources/keystore/bestlc-keystore.jks
+    key-store-password: b1e2s3t4!!
+    key-alias: bestlc_kcb
+    trust-store: /home/bestlc_dev/projects/best-fin-api/src/main/resources/keystore/bestlc-keystore.jks
+    trust-store-password: b1e2s3t4!!
+
+# sms
+gabia:
+  sms-api-url: https://sms.gabia.com
+  sms-id: bestlc
+  api-key: a7eadd7662be85fc0eefa0f8fb03c719
+  caller-id: 02-782-1377
+
+######
+database:
+  master:
+    hikari:
+      driver-class-name: org.mariadb.jdbc.Driver
+      jdbc-url: jdbc:mariadb://bestlc-fin.cf1firlpg99r.ap-northeast-2.rds.amazonaws.com:3306/fin_bestlc
+      username: bestlc_dev
+      password: b1e2s3t4!!
+      connection-timeout: 60000
+      maximum-pool-size: 4
+      pool-name: HikariPool-master
+
+pagehelper:
+  helper-dialect: mariadb
+  reasonable: true
+  supportMethodsArguments: true
+
+######
+multipart:
+  ctx: /assets/upload/
+  www: http://localhost:29000
+
+######
+loan:
+  obtain:
+    auth: 1fda79baab46f75cc7859116383dc57b
+    host: http://finlife.fss.or.kr
+  mortgageLoan:
+    url: /finlifeapi/mortgageLoanProductsSearch.json
+  rentHouseLoan:
+    url: /finlifeapi/rentHouseLoanProductsSearch.json
+  creditLoan:
+    url: /finlifeapi/creditLoanProductsSearch.json
+
+#####
+datagokr:
+  NpsBplcInfoInqireService:
+    auth: t8%2Bx8q99%2BwezmYrO30HOmPZsYqrCKpMhLngNj%2BNTfqmz7klhJ3wR0%2FagajzPUvjpYhHpzgP0gQN6q0GCSph%2ByQ%3D%3D
+    url:
+
+#####
+google:
+  maps:
+    geocode:
+      key: AIzaSyAcZjoaOitXsINKCWe4cv8ltUsGc4CWFgk
+      host: https://maps.googleapis.com
+      url: /maps/api/geocode/json
+
+#####
+mypage:
+  landingUrl: https://www.bestfin.co.kr/fin/mypage/counselInfo
